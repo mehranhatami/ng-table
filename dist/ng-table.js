@@ -1486,11 +1486,9 @@
             };
 
             this.buildColumns = function (columns) {
-                var result = [];
-                columns.forEach(function(col){
-                    result.push(ngTableColumn.buildColumn(col, $scope, result));
+                return map(columns, function(col){
+                    return ngTableColumn.buildColumn(col, $scope, result);
                 });
-                return result
             };
 
             this.parseNgTableDynamicExpr = function (attr) {
@@ -1587,6 +1585,19 @@
                     }
                 }
                 return found;
+            }
+
+            function map(array, predicate) {
+                var index = -1,
+                  length = (array && typeof array === 'object' && array.length) || 0,
+                  result;
+                /* jshint ignore:start */
+                result = Array(length);
+                /* jshint ignore:end */
+                while (++index < length) {
+                  result[index] = predicate(array[index], index, array);
+                }
+                return result;
             }
 
             function commonInit(){
